@@ -5,11 +5,11 @@ from torch.utils.data import Dataset, DataLoader
 from torchvision import transforms
 import torch.optim as optim
 
-batch_size = 256
-iterations = 2
+batch_size = 512
+iterations = 3
 discriminator_update_steps_k = 1
-learning_rate = 0.1
-momentum = 0.1
+learning_rate = 0.01
+momentum = 0.01
 log_interval = 10
 
 mnist_trainset = datasets.MNIST(root='../data', train=True, download=True, transform=transforms.ToTensor())
