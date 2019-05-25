@@ -4,12 +4,31 @@ import torchvision.datasets as datasets
 from torch.utils.data import Dataset, DataLoader
 from torchvision import transforms
 import torch.optim as optim
+import argparse
 
-batch_size = 512
-iterations = 15
+parser = argparse.ArgumentParser(description='GAN MNIST Example')
+parser.add_argument(
+        '-b',
+        '--batch_size',
+        type=int,
+        default=512,
+        help="""Batch size""")
+
+parser.add_argument(
+        '-i',
+        '--iterations',
+        type=int,
+        default=3,
+        help="""Total training iterations""")
+
+args = parser.parse_args()
+
+batch_size = args.batch_size
+iterations = args.iterations
+
 discriminator_update_steps_k = 1
-learning_rate = 0.01
-momentum = 0.01
+learning_rate = 0.001
+momentum = 0.9
 log_interval = 10
 
 gpu_id = torch.cuda.current_device()
@@ -31,15 +50,17 @@ criterion = torch.nn.BCELoss()
 generator.cuda(cuda_name)
 discriminator.cuda(cuda_name)
 
-nn.init.normal_(generator.gen_fc1.weight, 0.0, 0.1)
-nn.init.normal_(generator.gen_fc2.weight, 0.0, 0.1)
-nn.init.normal_(generator.gen_fc3.weight, 0.0, 0.1)
-nn.init.normal_(generator.gen_fc4.weight, 0.0, 0.1)
-nn.init.normal_(generator.gen_fc5.weight, 0.0, 0.1)
+"""
+nn.init.normal_(generator.gen_fc1.weight, 0.0, 0.01)
+nn.init.normal_(generator.gen_fc2.weight, 0.0, 0.01)
+nn.init.normal_(generator.gen_fc3.weight, 0.0, 0.01)
+nn.init.normal_(generator.gen_fc4.weight, 0.0, 0.01)
+nn.init.normal_(generator.gen_fc5.weight, 0.0, 0.01)
 
-nn.init.normal_(discriminator.dis_fc1.weight, 0.0, 0.1)
-nn.init.normal_(discriminator.dis_fc2.weight, 0.0, 0.1)
-nn.init.normal_(discriminator.dis_fc3.weight, 0.0, 0.1)
+nn.init.normal_(discriminator.dis_fc1.weight, 0.0, 0.01)
+nn.init.normal_(discriminator.dis_fc2.weight, 0.0, 0.01)
+nn.init.normal_(discriminator.dis_fc3.weight, 0.0, 0.01)
+"""
 
 generator.train()
 discriminator.train()
