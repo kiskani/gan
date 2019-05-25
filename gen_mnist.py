@@ -24,7 +24,7 @@ if __name__ == "__main__":
                                          datetime.now().second)
    
     with torch.no_grad():
-        random_input = torch.randn(64, 180).to(device)
+        random_input = torch.randn(64, 100).to(device)
         sample = model(random_input).cpu()
         print(sample.size())
         one_sample = sample[0,:].view(1, 1, 28, 28)
