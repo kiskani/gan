@@ -56,32 +56,14 @@ for epoch in range(iterations):
             disc_loss_real.backward()
  
             z_input = torch.randn([x_data_input.size(0), input_noise_dim]).cuda(cuda_name)
-            x_fake_input = generator(z_input).detach()
+            x_fake_input = generator(z_input).detach()    # detach to avoid training generator on these labels
             fake_probs = discriminator(x_fake_input)
             fake_targets = torch.zeros_like(fake_probs)
             disc_loss_fake = criterion(fake_probs, fake_targets)
             disc_loss_fake.backward()
 
-            disc_loss = disc_loss_real + disc_loss_fake
             dis_optimizer.step()
-            #print(x_data_input[:10,:10], x_fake_input[:10,:10])
-            #data_output = discriminator(x_data_input)
-            #all_output = torch.cat((fake_output, data_output), 0)
-            #all_target = torch.cat((fake_targets, data_targets), 0)
-            #disc_loss = criterion(all_output, all_target)
-            #disc_loss.backward()
-            #print("----------------------------")
-            #print(x_fake_input)
-            #print(x_data_input)
-            #print("----------------------------")
-            #print(data_output)
-            #print("----------------------------")
-            #print(data_targets)
-            #print("----------------------------")
-            #print(torch.sum(x_fake_input, dim=1))
-            #print(torch.sum(x_data_input, dim=1))
-            #print("----------------------------")
-            #exit()
+            disc_loss = disc_loss_real + disc_loss_fake
  
             if i_batch % log_interval == 0:
                 print('Train Epoch: {} [{}/{} ({:.0f}%)]\tDiscriminator\tLoss: {:.6f}\tReal precision: {:.4f}\tFake precision: {:.4f}'.format(epoch, i_batch * batch_size, len(train_dataloader) * batch_size, 100. * i_batch / len(train_dataloader), disc_loss.item(),\
@@ -98,7 +80,7 @@ for epoch in range(iterations):
     for batch_idx, _ in enumerate(train_dataloader):
             generator.zero_grad()
             z_input = torch.randn([batch_size, input_noise_dim]).cuda(cuda_name)
-            x_fake_input = generator(z_input)#.detach()
+            x_fake_input = generator(z_input)
             fake_output = discriminator(x_fake_input)
 
             fake_targets = torch.ones_like(fake_output) 
@@ -107,9 +89,9 @@ for epoch in range(iterations):
             gen_optimizer.step()
 
             if batch_idx % log_interval == 0:
-                print('Train Epoch: {} [{}/{} ({:.0f}%)]\tGenerator\tLoss: {:.6f}'.format(
+                print('Train Epoch: {} [{}/{} ({:.0f}%)]\tGenerator\tLoss: {:.6f}\tFake precision: {:.4f}'.format(
                     epoch, batch_idx * batch_size, len(train_dataloader) * batch_size,
-                    100. * batch_idx / len(train_dataloader), gen_loss.item()))
+                    100. * batch_idx / len(train_dataloader), gen_loss.item(), torch.mean(fake_output).item()))
                 train_losses.append(gen_loss.item())
                 train_counter.append(
                     (i_batch * batch_size) + ((epoch-1)*len(train_dataloader) * batch_size))
