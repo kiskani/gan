@@ -50,18 +50,6 @@ criterion = torch.nn.BCELoss()
 generator.cuda(cuda_name)
 discriminator.cuda(cuda_name)
 
-"""
-nn.init.normal_(generator.gen_fc1.weight, 0.0, 0.01)
-nn.init.normal_(generator.gen_fc2.weight, 0.0, 0.01)
-nn.init.normal_(generator.gen_fc3.weight, 0.0, 0.01)
-nn.init.normal_(generator.gen_fc4.weight, 0.0, 0.01)
-nn.init.normal_(generator.gen_fc5.weight, 0.0, 0.01)
-
-nn.init.normal_(discriminator.dis_fc1.weight, 0.0, 0.01)
-nn.init.normal_(discriminator.dis_fc2.weight, 0.0, 0.01)
-nn.init.normal_(discriminator.dis_fc3.weight, 0.0, 0.01)
-"""
-
 generator.train()
 discriminator.train()
 
